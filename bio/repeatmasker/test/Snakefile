@@ -1,0 +1,25 @@
+rule rm_build:
+    input:
+        fa=Path(outdir, "010_clean_query", "query.cleaned.fa"),
+    output:
+        tx=Path(outdir, "020_repeatmasker", "query.translation"),
+    params:
+        wd=lambda wildcards, output: Path(output.tx).parent.resolve(),
+        fa_dir=lambda wildcards, input: Path(input.fa).parent.resolve(),
+    log:
+        Path(logdir, "rm_build.log").resolve(),
+    benchmark:
+        Path(benchdir, "rm_build.txt").resolve()
+    threads: 1
+    resources:
+        time=lambda wildcards, attempt: 120 * attempt,
+    container:
+        tetools
+    shell:
+        "mkdir -p {params.wd} && cd {params.wd} || exit 1 "
+        "&& "
+        "BuildDatabase "
+        "-name query "
+        "-engine ncbi "
+        "-dir {params.fa_dir} "
+        "&> {log} "
