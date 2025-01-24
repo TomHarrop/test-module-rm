@@ -10,34 +10,40 @@ rule mask:
         ),
         fa=Path("results", "query.cleaned.fa"),
     output:
-        temp(
+        multiext(
             Path(
                 "results",
                 "repeatmasker",
-                "query.cleaned.fa.masked",
-            )
+                "query.cleaned.fa",
+            ).as_posix(),
+            ".masked",
+            ".tbl",
+            ".cat",
+            ".out",
         ),
     params:
-        wd=lambda wildcards, input: Path(input.cons).parent.resolve(),
-        fa=lambda wildcards, input: Path(input.fa).resolve(),
         threads=lambda wildcards, threads: threads // 4,
+        outdir=lambda wildcards, output: Path(output[0]).parent,
     log:
-        Path("logs", "mask.log").resolve(),
+        Path("logs", "mask.log"),
     benchmark:
-        Path("logs", "mask.txt").resolve()
+        Path("logs", "mask.txt")
     threads: lambda wildcards, attempt: 12 * attempt
     resources:
         time=lambda wildcards, attempt: 1440 * attempt,
         mem_mb=lambda wildcards, attempt: 12e3 * attempt,
+    shadow:
+        "minimal"
     container:
         get_container("tetools")
+    # rm expects the dir under /opt to exist
     shell:
-        "cd {params.wd} || exit 1 ; "
+        "mkdir -p /opt/RepeatMasker/Libraries/general ; "
         "RepeatMasker "
         "-engine ncbi "
         "-pa {params.threads} "
-        "-lib query-families.fa.classified "
-        "-dir {params.wd} "
+        "-lib {input.cons} "
         "-gccalc -xsmall -gff -html "
-        "{params.fa} "
+        "{input.fa} "
         "&> {log} "
+        "&& mv {input.fa}.* {params.outdir}/ "

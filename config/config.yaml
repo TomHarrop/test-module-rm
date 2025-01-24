@@ -2,11 +2,11 @@ containers:
   funannotate:
     prefix: docker
     url: nextgenusfs/funannotate
-    tag: v1.8.15
+    tag: v1.8.17
   tetools: 
     prefix: docker
     url: dfam/tetools
-    tag: 1.85
+    tag: "1.90"
   bbmap: 
     prefix: docker
     url: quay.io/biocontainers/bbmap

@@ -1,30 +1,34 @@
 
 rule classify:
     input:
-        Path("results", "repeatmasker", "query-families.stk"),
-        Path("results", "repeatmasker", "query-families.fa"),
+        stk=Path("results", "repeatmasker", "query-families.stk"),
+        fa=Path("results", "repeatmasker", "query-families.fa"),
     output:
         Path(
             "results",
             "repeatmasker",
             "query-families.fa.classified",
         ),
-    params:
-        wd=lambda wildcards, input: Path(input[0]).parent.resolve(),
+        Path(
+            "results",
+            "repeatmasker",
+            "query-families-classified.stk",
+        ),
     log:
-        Path("logs", "classify.log").resolve(),
+        Path("logs", "classify.log"),
     benchmark:
-        Path("logs", "classify.benchmarks.txt").resolve()
+        Path("logs", "classify.benchmarks.txt")
     threads: lambda wildcards, attempt: 10 * attempt
     resources:
         time=lambda wildcards, attempt: 60 * attempt,
         mem_mb=lambda wildcards, attempt: 12e3 * attempt,
     container:
         get_container("tetools")
+    shadow:
+        "minimal"
     shell:
-        "cd {params.wd} || exit 1 ; "
         "RepeatClassifier "
         "-threads {threads} "
-        "-consensi query-families.fa "
-        "-stockholm query-families.stk "
+        "-consensi {input.fa} "
+        "-stockholm {input.stk} "
         "&> {log}"

@@ -3,13 +3,10 @@ rule clean:
         fa=Path("results", "query.reformat.fa"),
     output:
         fa=temp(Path("results", "query.cleaned.fa")),
-    params:
-        wd=lambda wildcards, output: Path(output.fa).parent.resolve(),
-        fa=lambda wildcards, input: Path(input.fa).resolve(),
     log:
-        Path("logs", "clean_query.log").resolve(),
+        Path("logs", "clean_query.log"),
     benchmark:
-        Path("logs", "clean_query.benchmark.txt").resolve()
+        Path("logs", "clean_query.benchmark.txt")
     threads: lambda wildcards, attempt: 20 * attempt
     resources:
         time=lambda wildcards, attempt: 2880 * attempt,
@@ -17,12 +14,10 @@ rule clean:
     container:
         get_container("funannotate")
     shell:
-        "mkdir -p {params.wd} && cd {params.wd} || exit 1 "
-        "&& "
         "funannotate clean "
         "--exhaustive "
-        "--input {params.fa} "
-        "--out query.cleaned.fa "
+        "--input {input.fa} "
+        "--out {output.fa} "
         "--cpus {threads} "
         "&> {log}"
 
