@@ -1,0 +1,13 @@
+containers:
+  funannotate:
+    prefix: docker
+    url: nextgenusfs/funannotate
+    tag: v1.8.15
+  tetools: 
+    prefix: docker
+    url: dfam/tetools
+    tag: 1.85
+  bbmap: 
+    prefix: docker
+    url: quay.io/biocontainers/bbmap
+    tag: 39.01--h92535d8_1

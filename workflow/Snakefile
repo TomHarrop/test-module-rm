@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+
+
+configfile: "config/config.yaml"
+
+
+# catch query_genome
+query_genome = config["query_genome"]
+
+
+include: "rules/common.smk"
+include: "rules/clean.smk"
+include: "rules/build.smk"
+include: "rules/model.smk"
+include: "rules/classify.smk"
+include: "rules/mask.smk"
+
+
+# collect the output
+rule all:
+    input:
+        rules.mask.output[0],
+    output:
+        Path("results", "query.masked.fa.gz"),
+    log:
+        Path("logs", "reformat.log"),
+    container:
+        get_container("bbmap")
+    shell:
+        "reformat.sh in={input} out={output} zl=9 2>{log}"
