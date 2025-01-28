@@ -27,7 +27,7 @@ rule mask:
     log:
         Path("logs", "mask.log"),
     benchmark:
-        Path("logs", "mask.txt")
+        Path("logs", "mask.benchmark.txt")
     threads: lambda wildcards, attempt: 12 * attempt
     resources:
         time=lambda wildcards, attempt: 1440 * attempt,

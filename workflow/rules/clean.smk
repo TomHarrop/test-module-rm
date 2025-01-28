@@ -29,7 +29,15 @@ rule reformat:
         temp(Path("results", "query.reformat.fa")),
     log:
         Path("logs", "reformat.log"),
+    benchmark:
+        Path("logs", "reformat.benchmark.txt")
+    resources:
+        mem_mb=lambda wildcards, attempt: 16e3 * attempt,
     container:
         get_container("bbmap")
     shell:
-        "reformat.sh in={input} out={output} 2>{log}"
+        "reformat.sh "
+        "-Xmx{resources.mem_mb}m "
+        "in={input} "
+        "out={output} "
+        "2>{log}"
