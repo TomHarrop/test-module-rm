@@ -9,7 +9,7 @@ rule clean:
         Path("logs", "clean_query.benchmark.txt")
     threads: lambda wildcards, attempt: 20 * attempt
     resources:
-        time=lambda wildcards, attempt: 2880 * attempt,
+        runtime=lambda wildcards, attempt: 2880 * attempt,
         mem_mb=lambda wildcards, attempt: 24e3 * attempt,
     container:
         get_container("funannotate")

@@ -30,7 +30,7 @@ rule mask:
         Path("logs", "mask.benchmark.txt")
     threads: lambda wildcards, attempt: 12 * attempt
     resources:
-        time=lambda wildcards, attempt: 1440 * attempt,
+        runtime=lambda wildcards, attempt: 1440 * attempt,
         mem_mb=lambda wildcards, attempt: 12e3 * attempt,
     shadow:
         "minimal"

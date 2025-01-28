@@ -23,7 +23,7 @@ rule build:
         Path("logs", "build.benchmark.txt")
     threads: 1
     resources:
-        time=lambda wildcards, attempt: 120 * attempt,
+        runtime=lambda wildcards, attempt: 120 * attempt,
     shadow:
         "minimal"
     container:

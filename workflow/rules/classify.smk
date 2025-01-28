@@ -20,7 +20,7 @@ rule classify:
         Path("logs", "classify.benchmarks.txt")
     threads: lambda wildcards, attempt: 10 * attempt
     resources:
-        time=lambda wildcards, attempt: 60 * attempt,
+        runtime=lambda wildcards, attempt: 60 * attempt,
         mem_mb=lambda wildcards, attempt: 12e3 * attempt,
     container:
         get_container("tetools")

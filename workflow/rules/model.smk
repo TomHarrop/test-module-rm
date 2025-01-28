@@ -14,7 +14,7 @@ rule model:
         Path("logs", "model.benchmark.txt")
     threads: lambda wildcards, attempt: 10 * attempt
     resources:
-        time=lambda wildcards, attempt: 1440 * attempt,
+        runtime=lambda wildcards, attempt: 1440 * attempt,
         mem_mb=lambda wildcards, attempt: 12e3 * attempt,
     container:
         get_container("tetools")
