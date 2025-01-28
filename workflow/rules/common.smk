@@ -11,7 +11,11 @@ def get_container(container_name):
     if container_name not in containers:
         raise ValueError(f"Container {container_name} not found in config.")
     my_container = containers[container_name]
-    return f"{my_container["prefix"]}://{my_container["url"]}:{my_container["tag"]}"
+    return (
+        f"{my_container['prefix']}://"
+        f"{my_container['url']}:"
+        f"{my_container['tag']}"
+    )
 
 
 configfile: "config/config.yaml"
