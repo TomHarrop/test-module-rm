@@ -11,6 +11,8 @@ rule clean:
     resources:
         runtime=lambda wildcards, attempt: 720 * attempt,
         mem_mb=lambda wildcards, attempt: 24e3 * attempt,
+    shadow:
+        "minimal"
     container:
         get_container("funannotate")
     shell:
